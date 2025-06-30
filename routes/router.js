@@ -1,3 +1,5 @@
+const multer  = require('multer');
+const upload = multer({ dest: 'uploads/'})
 const express = require("express")
 const router = express.Router()
 const Foodpost= require("../models/foodpost")
@@ -10,7 +12,7 @@ router.get("/new",async(req,res)=>{
     res.render("new")
 })
 
-router.post("/",async(req,res)=>{
+router.post('/',upload.array('image'),async (req,res)=>{
     const foodpost=new Foodpost(req.body)
     foodpost.images= req.files ? req.files.map(f=>({url:f.path,filename:f.filename})) : []
     await foodpost.save()
